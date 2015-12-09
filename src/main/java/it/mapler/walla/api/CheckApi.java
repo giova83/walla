@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/check")
 public class CheckApi {
 	
-	private static final Logger LOGGER = LoggerFactory.getLogger(LoginDao.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CheckApi.class);
 
 	 @RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody Status getStatus(){
 		 
-        LOGGER.info("CheckApi -START-");
+        LOGGER.info("CheckApi - START-");
 		 
         Runtime runtime = Runtime.getRuntime();
         long maxMemory = runtime.maxMemory();
