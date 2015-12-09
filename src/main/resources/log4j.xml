@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+   
+   	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+	    <layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern" 
+			value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+	    </layout>
+	</appender>
+   
+   
+    <appender name="AppenderWalla" class="org.apache.log4j.RollingFileAppender">
+        <param name="append" value="true" />
+        <param name="MaxFileSize" value="20MB"/>
+        <param name="threshold" value="DEBUG"/>
+        <param name="File" value="${walla.dir.logs}/walla-be.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d  %-5p  [%c{1}] %m %n" />
+        </layout>
+    </appender>
+
+    <appender name="AppenderWallaSpring" class="org.apache.log4j.RollingFileAppender">
+        <param name="append" value="true" />
+        <param name="MaxFileSize" value="20MB"/>
+        <param name="threshold" value="INFO"/>
+        <param name="File" value="${walla.dir.logs}/walla-be-spring.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d  %-5p  [%c{1}] %m %n" />
+        </layout>
+    </appender>
+
+  
+    <category name="it.mapler.walla" >
+        <priority value="DEBUG"/>
+        <appender-ref ref="AppenderWalla"/>
+    </category>
+
+
+
+    <category name="org.springframework" >
+        <priority value="INFO" />
+        <appender-ref ref="AppenderWallaSpring"/>
+        <!-- <appender-ref ref="console"/> -->
+    </category>
+
+
+
+</log4j:configuration>
