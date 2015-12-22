@@ -1,6 +1,6 @@
 package it.mapler.walla.api.response;
 
-public class UserResponse extends AbsResponse{
+public class RegistrationResponse extends AbsResponse{
 
 	/**
 	 * 
