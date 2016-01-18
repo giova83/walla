@@ -103,5 +103,27 @@ public class LoginService extends AbsService{
 	}
 	
 	
+	public boolean checkLogin(String token) throws Exception{
+		LOGGER.info("LoginServices.checkLogin - START");
+		 try{
+	         LOGGER.info("token:"+token);
+	         Login login = loginDao.getLogin(token);
+	         if(login == null){
+	        	 return false;
+	         }
+	         return true;
+	            
+		  }catch(WallaDBException we){
+			  LOGGER.error(we.getMessage(),we);
+			  throw new Exception(we.getMessage());
+		  }catch(Exception e){
+			  LOGGER.error(e.getMessage(),e);
+			  throw e;
+		  }finally{
+			  LOGGER.info("LoginServices.checkLogin - END");  
+		  }
+	
+	}
+	
 	
 }
