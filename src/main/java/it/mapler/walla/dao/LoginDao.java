@@ -54,7 +54,7 @@ public class LoginDao extends AbsDao{
 	
 	public Login getLogin(String token) throws WallaDBException{
 		LOGGER.info("LoginDao.getLogin - START");
-		String sql = "SELECT * FROM "+TABLE_LOGIN+" WHERE  = ?";
+		String sql = "SELECT * FROM "+TABLE_LOGIN+" WHERE  token = ?";
 		Login login = null;
 		try{ 
 		     login = (Login) jdbcTemplate.queryForObject(sql, new Object[] { token }, new LoginRowMapper());

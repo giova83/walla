@@ -42,7 +42,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
 			final Claims claims = Jwts.parser().setSigningKey("secretkey").parseClaimsJws(token).getBody();
 			request.setAttribute("claims", claims);
 
-			if (!loginService.checkLogin(token)) {
+			if (!loginService.checkLogin(token.trim())) {
 				throw new Exception("token not found.");
 			}
 		} catch (final MalformedJwtException e) {

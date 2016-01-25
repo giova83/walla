@@ -61,7 +61,7 @@ public class LoginService extends AbsService{
 	        			 return loginResponse;
 	        		 }
 	        		 
-	        		 String token = Jwts.builder().setSubject(user.getUsername()).claim("profile", user.getProfilo()
+	        		 String token = Jwts.builder().setSubject(String.valueOf(user.getIdUser())).claim("profile", user.getProfilo()
 	        				                       .getName()).setIssuedAt(now.getTime()).signWith(SignatureAlgorithm.HS256, "secretkey").compact();
 	        		 LOGGER.info("user["+user.getUsername()+"] -> "+token);
 	        		 

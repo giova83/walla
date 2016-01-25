@@ -37,7 +37,7 @@
       <!-- Configuring interceptors based on URI -->
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/api/*" />
+            <mvc:mapping path="/api/**" />           
             <bean class="it.mapler.walla.interceptor.JwtInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
