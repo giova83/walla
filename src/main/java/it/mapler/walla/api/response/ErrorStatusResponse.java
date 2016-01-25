@@ -1,6 +1,6 @@
 package it.mapler.walla.api.response;
 
-public class RedirectResponse extends AbsResponse{
+public class ErrorStatusResponse extends AbsResponse{
 
 	/**
 	 * 

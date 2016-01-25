@@ -11,16 +11,6 @@
     </servlet-class>
     <load-on-startup>1</load-on-startup>
 </servlet>
-
-   <filter>
-      <filter-name>jwtFilter</filter-name>
-      <filter-class>it.mapler.walla.filter.JwtFilter</filter-class>
-   </filter>
-
-   <filter-mapping>
-      <filter-name>jwtFilter</filter-name>
-      <url-pattern>/rest/api/*</url-pattern>
-   </filter-mapping>
  
   <servlet-mapping>
     <servlet-name>rest</servlet-name>

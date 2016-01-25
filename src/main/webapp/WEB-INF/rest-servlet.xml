@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
-   
+
     xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
 		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
@@ -12,15 +12,15 @@
 
 
     <context:property-placeholder location="classpath:/walla.properties"/>
-    
-    <import resource="/db-context.xml" /> 
- 
+
+    <import resource="/db-context.xml" />
+
     <context:component-scan base-package="it.mapler.walla.*" />
 
-	
+
 	   <!-- Enables the Spring MVC @Controller programming model -->
     <mvc:annotation-driven />
- 
+
    <!-- for processing requests with annotated controller methods and set Message Convertors from the list of convertors -->
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
@@ -29,11 +29,18 @@
             </list>
         </property>
     </bean>
- 
+
     <!-- To  convert JSON to Object and vice versa -->
     <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-    </bean> 
-    
-	
-	
+    </bean>
+
+      <!-- Configuring interceptors based on URI -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/api/*" />
+            <bean class="it.mapler.walla.interceptor.JwtInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
   </beans>
