@@ -15,6 +15,7 @@ import it.mapler.walla.exception.WallaDBException;
 import it.mapler.walla.model.Login;
 import it.mapler.walla.model.Offer;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -108,7 +109,7 @@ public class OfferDao extends AbsDao {
 	   
 	   
 		// ritorna un elenco di Offerte filtrate per i parametri inseriti
-	   public List<Offer> findAllOfferByPar(String citta, String categoria,String tipologia, String titolo, Date datapubblicazione)throws WallaDBException{
+	   public List<Offer> findAllOfferByPar(String citta, String categoria,String tipologia, String titolo, Calendar datapubblicazione)throws WallaDBException{
 	    	LOGGER.info("OfferDao.findAllOfferByPar - START");
 	    	String sql = " SELECT "
 	    			+ " O.IDRISTORANTE as IDRISTORANTE,"
@@ -124,23 +125,41 @@ public class OfferDao extends AbsDao {
 	    			+ " FROM "+TABLE_OFFER+" O , "+TABLE_RISTORANTE+" R WHERE 1=1 AND R.IDRISTORANTE = O.IDRISTORANTE  ";
 	    	
 	    	//Object[] elenco_parametri = new Object[] {};// QUI
+	    	            List<Object> params = new ArrayList<Object>();
+	    	            List<Integer> types = new ArrayList<Integer>(); 
 	    	           if(citta != null && !citta.isEmpty())
-	    			   {sql +=" and R.citta =  ? " ; } 
+	    			   {sql +=" and R.citta =  ? " ;
+	    			     params.add(citta);
+	    			     types.add(Types.VARCHAR);	    			   
+	    			   } 
 	    			   if(categoria != null && !categoria.isEmpty())
-	    			   {sql +=" and O.categoria =  ? " ;} 
+	    			   {sql +=" and O.categoria =  ? " ;
+	    			      params.add(categoria);
+	    			     types.add(Types.VARCHAR);
+	    			   } 
 	    			   if(tipologia != null && !tipologia.isEmpty())
-	    			   {sql +=" and O.tipologia = ? " ;} 
+	    			   {sql +=" and O.tipologia = ? " ;
+	    			      params.add(tipologia);
+	    			     types.add(Types.VARCHAR);
+	    			   } 
 	    			   if(titolo != null && !titolo.isEmpty())
-	    			   {sql +=" and O.titolo =  ? " ;} 
-	    			   if(datapubblicazione != null)
-	    			   {sql +="and C.datapubblicazione =  ? " ;}
+	    			   {sql +=" and O.titolo =  ? " ;
+	    			   params.add(titolo);
+	    			     types.add(Types.VARCHAR);
 	    			   
-	    			  // definire parametri dinamici
-	    			   Object[] elenco_parametri = new Object[] {citta,tipologia};
+	    			   } 
+	    			   if(datapubblicazione != null)
+	    			   {sql +="and O.datapubblicazione =  ? " ;
+	    			      params.add(datapubblicazione);
+	    			     types.add(Types.TIMESTAMP);
+	    			   }
+	    			   
+	    			  // definire parametri dinamic
 	    			  
 	    			   List<Offer> offers = null;
-	      try{		 
-	    	  offers = jdbcTemplate.query(sql, elenco_parametri, new OfferRowMapper());// QUI
+	      try{
+	    	  int [] typesP = ArrayUtils.toPrimitive(types.toArray(new Integer[types.size()]));
+	    	  offers = jdbcTemplate.query(sql, params.toArray(), typesP ,new OfferRowMapper());// QUI
 	    	}catch(Exception e){
 	    		LOGGER.info("error in findAllOfferByPar:"+e.getMessage(),e);
 	    		throw new WallaDBException("error in findAllOfferByPar:"+e.getMessage());
@@ -155,7 +174,7 @@ public class OfferDao extends AbsDao {
 	   public void offerUpdate(Offer offer) throws WallaDBException {
 		   LOGGER.info("Offer.UpdateOffer - START");
 		   
-			String  sqlDelete = "UPDATE TABLE "+TABLE_OFFER+" "
+			String  sqlUpdate = "UPDATE TABLE "+TABLE_OFFER+" "
 					+ "SET categoria="+offer.getCategoria()+","
 					+ "SET tipologia="+offer.getTipologia()+","
 					+ "SET titolo="+offer.getTitolo()+","

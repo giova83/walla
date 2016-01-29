@@ -43,7 +43,7 @@ public class OfferApi {
 		 LOGGER.info("OfferApi.login - START");
 		 try{
 			return offerService.getAllOfferByUserPar(offerRequest.getCitta(),offerRequest.getCategoria(), offerRequest.getTipologia(),
-					offerRequest.getTitolo(), offerRequest.getDataPubblicazione()); 
+					offerRequest.getTitolo(), offerRequest.getDatapubblicazione()); 
 		 }finally{
 			 LOGGER.info("OfferApi.login - END"); 
 		 }

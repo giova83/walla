@@ -1,5 +1,6 @@
 package it.mapler.walla.api.request;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class OfferRequest {
@@ -8,7 +9,7 @@ public class OfferRequest {
 	private String categoria;
 	private String tipologia;
 	private String citta;
-	private Date dataPubblicazione;
+	private Calendar datapubblicazione;
 	
 	
 	public String getTitolo() {
@@ -35,14 +36,14 @@ public class OfferRequest {
 	public void setCitta(String citta) {
 		this.citta = citta;
 	}
-
-	public Date getDataPubblicazione() {
-		return dataPubblicazione;
+	public Calendar getDatapubblicazione() {
+		return datapubblicazione;
 	}
-	public void setDataPubblicazione(Date dataPubblicazione) {
-		this.dataPubblicazione = dataPubblicazione;
+	public void setDatapubblicazione(Calendar datapubblicazione) {
+		this.datapubblicazione = datapubblicazione;
 	}
-
+    
+    
 }
 
 

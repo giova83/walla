@@ -81,7 +81,7 @@ public class OfferService extends AbsService{
 	}
 
 	
-	public OfferResponse getAllOfferByUserPar(String citta, String categoria,String tipologia, String titolo, Date datapubblicazione){
+	public OfferResponse getAllOfferByUserPar(String citta, String categoria,String tipologia, String titolo, Calendar datapubblicazione){
 		LOGGER.info("OfferServices.login - START");
 		OfferResponse offerResponse = new OfferResponse();
 		List<Offer> offers = null;
@@ -91,6 +91,12 @@ public class OfferService extends AbsService{
 	         		+ "Categoria: "+categoria+", Tipologia: "+tipologia+", CittÃ : "+citta+""
 	         		+ ", Data di Pubblicazione: "+datapubblicazione);
 	         
+	        // GregorianCalendar dataPub = null;
+	         
+	        /* if(StringUtils.isNoneEmpty(datapubblicazione)){
+	           dataPub = new GregorianCalendar();
+	           dataPub.setTimeInMillis(Long.valueOf(datapubblicazione));
+	         }*/
 	         offers = offerDao.findAllOfferByPar(citta, categoria, tipologia, titolo, datapubblicazione);
 	         
 	         offerResponse.setOfferts(offers);
