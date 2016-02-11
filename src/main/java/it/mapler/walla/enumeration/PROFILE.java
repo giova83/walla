@@ -2,22 +2,30 @@ package it.mapler.walla.enumeration;
 
 public enum PROFILE {
 	
-	ADMIN("Admin"),
-	CANDIDATO("Candidato"),
-	RISTORATORE("Ristoratore"),
-	FORNITORE("Fornitore");
+	ADMIN("Admin","user"),
+	CANDIDATO("Candidato","candidato"),
+	RISTORATORE("Ristoratore","ristoratore"),
+	FORNITORE("Fornitore","fornitore");
 	
     private String name;
+    private String table;
 
-	private PROFILE(String name) {
+	private PROFILE(String name,String table) {
 		this.name = name;
+		this.table = table;
 	}
 
     public String getName() {
 		return name;
 	}
     
-    public static PROFILE getProfile(String profile){
+    
+    
+    public String getTable() {
+		return table;
+	}
+
+	public static PROFILE getProfile(String profile){
     	if(PROFILE.ADMIN.getName().equalsIgnoreCase(profile)){
     		return PROFILE.ADMIN;
     	}else if(PROFILE.CANDIDATO.getName().equalsIgnoreCase(profile)){
