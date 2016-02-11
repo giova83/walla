@@ -88,7 +88,7 @@ public class CandidateDao extends AbsDao {
 	
     // Aggiorna singolo candidato (UPDATE)
 	   public void candidateUpdate(Candidate candidato) throws WallaDBException {
-		   LOGGER.info("Offer.UpdateCandidate - START");
+		   LOGGER.info("Candidate.UpdateCandidate - START");
 		   
 		   try {
            List<Object> params = new ArrayList<Object>();

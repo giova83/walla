@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Creato il: Gen 28, 2016 alle 20:20
+-- Creato il: Feb 10, 2016 alle 20:53
 -- Versione del server: 5.6.26
 -- Versione PHP: 5.5.28
 
@@ -27,18 +27,18 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `aziendafornitrice` (
-  `idazienda` int(50) NOT NULL,
+  `idazienda` bigint(50) NOT NULL,
   `nome` varchar(30) NOT NULL,
-  `cognome` varchar(30) NOT NULL,
   `cellulare` int(20) NOT NULL,
   `categoria` varchar(40) NOT NULL,
   `indirizzo` varchar(50) NOT NULL,
   `citta` varchar(20) NOT NULL,
   `provincia` varchar(30) NOT NULL,
   `cap` int(11) NOT NULL,
+  `regione` varchar(30) NOT NULL,
   `latitudine` decimal(10,0) DEFAULT NULL,
   `longitudine` decimal(10,0) DEFAULT NULL,
-  `idfornitore` varchar(50) NOT NULL,
+  `idfornitore` bigint(50) NOT NULL,
   `partitaiva` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -49,10 +49,8 @@ CREATE TABLE IF NOT EXISTS `aziendafornitrice` (
 --
 
 CREATE TABLE IF NOT EXISTS `candidato` (
-  `candidato` varchar(30) NOT NULL,
   `nome` varchar(30) NOT NULL,
   `cognome` varchar(30) NOT NULL,
-  `username` varchar(50) NOT NULL,
   `datadinascita` datetime DEFAULT NULL,
   `annidiesperienza` int(11) DEFAULT NULL,
   `cv` blob,
@@ -63,15 +61,15 @@ CREATE TABLE IF NOT EXISTS `candidato` (
   `cap` int(10) DEFAULT NULL,
   `iduser` bigint(50) NOT NULL,
   `cellulare` varchar(20) NOT NULL,
-  `idcandidato` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `idcandidato` bigint(50) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dump dei dati per la tabella `candidato`
 --
 
-INSERT INTO `candidato` (`candidato`, `nome`, `cognome`, `username`, `datadinascita`, `annidiesperienza`, `cv`, `indirizzo`, `provincia`, `regione`, `citta`, `cap`, `iduser`, `cellulare`, `idcandidato`) VALUES
-('Candidato', '', '', '', NULL, NULL, NULL, NULL, NULL, NULL, 'Acciano', NULL, 5, '', 0);
+INSERT INTO `candidato` (`nome`, `cognome`, `datadinascita`, `annidiesperienza`, `cv`, `indirizzo`, `provincia`, `regione`, `citta`, `cap`, `iduser`, `cellulare`, `idcandidato`) VALUES
+('', '', NULL, NULL, NULL, NULL, NULL, NULL, 'Acciano', NULL, 5, '', 1);
 
 -- --------------------------------------------------------
 
@@ -80,11 +78,10 @@ INSERT INTO `candidato` (`candidato`, `nome`, `cognome`, `username`, `datadinasc
 --
 
 CREATE TABLE IF NOT EXISTS `candidatura` (
-  `idcandidatura` int(50) NOT NULL,
+  `idcandidatura` bigint(50) NOT NULL,
+  `idcandidato` bigint(50) NOT NULL,
   `descrizione` text NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `idristorante` int(50) NOT NULL,
-  `idcandidato` bigint(50) NOT NULL
+  `idofferta` bigint(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -8215,12 +8212,11 @@ INSERT INTO `comuni` (`id`, `nome`, `idprovincia`, `idregione`, `catasto`) VALUE
 --
 
 CREATE TABLE IF NOT EXISTS `esperienza` (
-  `idesperienza` int(11) NOT NULL,
-  `iduser` bigint(50) NOT NULL,
+  `idesperienza` bigint(50) NOT NULL,
+  `idcandidato` bigint(50) NOT NULL,
   `esperienza` varchar(100) NOT NULL,
   `qualifica` varchar(100) NOT NULL,
   `anni` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
   `tipologia` varchar(100) NOT NULL,
   `settore` varchar(100) NOT NULL,
   `livello` varchar(20) NOT NULL
@@ -8233,8 +8229,6 @@ CREATE TABLE IF NOT EXISTS `esperienza` (
 --
 
 CREATE TABLE IF NOT EXISTS `fornitore` (
-  `username` varchar(50) NOT NULL,
-  `fornitore` varchar(30) NOT NULL,
   `nome` varchar(30) NOT NULL,
   `cognome` varchar(30) NOT NULL,
   `cellulare` int(20) NOT NULL,
@@ -8288,15 +8282,16 @@ CREATE TABLE IF NOT EXISTS `offerta` (
   `tipologia` varchar(100) NOT NULL,
   `titolo` varchar(100) NOT NULL,
   `datapubblicazione` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `idristorante` int(52) NOT NULL
+  `idristorante` bigint(50) NOT NULL,
+  `offerta_attiva` tinyint(1) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dump dei dati per la tabella `offerta`
 --
 
-INSERT INTO `offerta` (`idofferta`, `descrizione`, `categoria`, `tipologia`, `titolo`, `datapubblicazione`, `idristorante`) VALUES
-(1, 'descrizione', 'categoria', 'tipologia', 'titolo', '2016-01-21 23:33:20', 3);
+INSERT INTO `offerta` (`idofferta`, `descrizione`, `categoria`, `tipologia`, `titolo`, `datapubblicazione`, `idristorante`, `offerta_attiva`) VALUES
+(1, 'descrizione', 'categoria', 'tipologia', 'titolo', '2016-01-21 23:33:20', 3, 0);
 
 -- --------------------------------------------------------
 
@@ -8305,15 +8300,16 @@ INSERT INTO `offerta` (`idofferta`, `descrizione`, `categoria`, `tipologia`, `ti
 --
 
 CREATE TABLE IF NOT EXISTS `prodotti` (
-  `idprodotto` int(11) NOT NULL,
-  `tipologia` varchar(30) NOT NULL,
-  `categoria` varchar(30) NOT NULL,
-  `titolo` varchar(30) NOT NULL,
+  `idprodotto` bigint(50) NOT NULL,
+  `tipologia` varchar(50) NOT NULL,
+  `categoria` varchar(50) NOT NULL,
+  `titolo` varchar(50) NOT NULL,
   `descrizione` varchar(200) NOT NULL,
   `datapubblicazione` datetime NOT NULL,
   `costo` decimal(10,0) NOT NULL,
-  `idazienda` varchar(50) NOT NULL,
-  `quantita` decimal(10,0) NOT NULL
+  `idazienda` bigint(50) NOT NULL,
+  `quantita` decimal(10,0) NOT NULL,
+  `prodotto_attivo` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -8646,9 +8642,8 @@ INSERT INTO `regioni` (`idregione`, `nomeregione`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `ristorante` (
-  `iduser` bigint(50) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `idristorante` int(50) NOT NULL,
+  `idristorante` bigint(50) NOT NULL,
+  `idristoratore` bigint(50) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `indirizzo` varchar(50) NOT NULL,
   `latitudine` decimal(10,0) DEFAULT NULL,
@@ -8664,8 +8659,8 @@ CREATE TABLE IF NOT EXISTS `ristorante` (
 -- Dump dei dati per la tabella `ristorante`
 --
 
-INSERT INTO `ristorante` (`iduser`, `username`, `idristorante`, `nome`, `indirizzo`, `latitudine`, `longitudine`, `citta`, `provincia`, `cap`, `regione`, `partitaiva`) VALUES
-(0, '', 3, 'Ristorante', 'indirizzo', NULL, NULL, 'Acciano', 'Aquila', 1, '', NULL);
+INSERT INTO `ristorante` (`idristorante`, `idristoratore`, `nome`, `indirizzo`, `latitudine`, `longitudine`, `citta`, `provincia`, `cap`, `regione`, `partitaiva`) VALUES
+(3, 2, 'Ristorante', 'indirizzo', NULL, NULL, 'Acciano', 'Aquila', 1, '', NULL);
 
 -- --------------------------------------------------------
 
@@ -8674,15 +8669,20 @@ INSERT INTO `ristorante` (`iduser`, `username`, `idristorante`, `nome`, `indiriz
 --
 
 CREATE TABLE IF NOT EXISTS `ristoratore` (
-  `username` varchar(50) NOT NULL,
-  `ristoratore` varchar(30) NOT NULL,
   `nome` varchar(30) NOT NULL,
   `cognome` varchar(30) NOT NULL,
   `cellulare` int(30) NOT NULL,
   `ristorante` varchar(50) NOT NULL,
   `iduser` bigint(50) NOT NULL,
   `idristoratore` bigint(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Dump dei dati per la tabella `ristoratore`
+--
+
+INSERT INTO `ristoratore` (`nome`, `cognome`, `cellulare`, `ristorante`, `iduser`, `idristoratore`) VALUES
+('ristoratore', '', 0, '', 5, 2);
 
 -- --------------------------------------------------------
 
@@ -8691,15 +8691,16 @@ CREATE TABLE IF NOT EXISTS `ristoratore` (
 --
 
 CREATE TABLE IF NOT EXISTS `servizi` (
-  `idservizio` int(11) NOT NULL,
-  `descrizione` int(200) NOT NULL,
-  `categoria` int(30) NOT NULL,
-  `tipologia` int(30) NOT NULL,
-  `titolo` int(30) NOT NULL,
-  `datapubblicazione` int(11) NOT NULL,
+  `idservizio` bigint(50) NOT NULL,
+  `descrizione` varchar(200) NOT NULL,
+  `categoria` varchar(50) NOT NULL,
+  `tipologia` varchar(50) NOT NULL,
+  `titolo` varchar(50) NOT NULL,
+  `datapubblicazione` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `costo` decimal(10,0) NOT NULL,
   `quantita` decimal(10,0) NOT NULL,
-  `idazienda` int(50) NOT NULL
+  `idazienda` bigint(50) NOT NULL,
+  `servizio_attivo` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -8732,14 +8733,14 @@ INSERT INTO `utente` (`username`, `password`, `iduser`, `email`, `resetpwd`, `id
 -- Indici per le tabelle `aziendafornitrice`
 --
 ALTER TABLE `aziendafornitrice`
-  ADD PRIMARY KEY (`idazienda`);
+  ADD PRIMARY KEY (`idazienda`),
+  ADD KEY `fk_az_fornitore` (`idfornitore`);
 
 --
 -- Indici per le tabelle `candidato`
 --
 ALTER TABLE `candidato`
-  ADD PRIMARY KEY (`username`),
-  ADD UNIQUE KEY `username_UNIQUE` (`username`),
+  ADD PRIMARY KEY (`idcandidato`),
   ADD UNIQUE KEY `iduser` (`iduser`),
   ADD KEY `fk_utente_candidato` (`iduser`);
 
@@ -8747,13 +8748,22 @@ ALTER TABLE `candidato`
 -- Indici per le tabelle `candidatura`
 --
 ALTER TABLE `candidatura`
-  ADD PRIMARY KEY (`idcandidatura`);
+  ADD PRIMARY KEY (`idcandidatura`),
+  ADD KEY `fk_utente_candidaton` (`idcandidato`),
+  ADD KEY `fk_offertac` (`idofferta`);
+
+--
+-- Indici per le tabelle `esperienza`
+--
+ALTER TABLE `esperienza`
+  ADD PRIMARY KEY (`idesperienza`),
+  ADD KEY `fk_esperienza_candidato` (`idcandidato`);
 
 --
 -- Indici per le tabelle `fornitore`
 --
 ALTER TABLE `fornitore`
-  ADD PRIMARY KEY (`username`),
+  ADD PRIMARY KEY (`idfornitore`),
   ADD UNIQUE KEY `iduser` (`iduser`),
   ADD KEY `fk_utente_fornitoreid` (`iduser`);
 
@@ -8767,7 +8777,15 @@ ALTER TABLE `login`
 -- Indici per le tabelle `offerta`
 --
 ALTER TABLE `offerta`
-  ADD PRIMARY KEY (`idofferta`);
+  ADD PRIMARY KEY (`idofferta`),
+  ADD KEY `fk_offerta_ristorante` (`idristorante`);
+
+--
+-- Indici per le tabelle `prodotti`
+--
+ALTER TABLE `prodotti`
+  ADD PRIMARY KEY (`idprodotto`),
+  ADD KEY `fk_az_prodotti` (`idazienda`);
 
 --
 -- Indici per le tabelle `regioni`
@@ -8779,15 +8797,23 @@ ALTER TABLE `regioni`
 -- Indici per le tabelle `ristorante`
 --
 ALTER TABLE `ristorante`
-  ADD PRIMARY KEY (`idristorante`);
+  ADD PRIMARY KEY (`idristorante`),
+  ADD KEY `fk_rist_ristoratore` (`idristoratore`);
 
 --
 -- Indici per le tabelle `ristoratore`
 --
 ALTER TABLE `ristoratore`
-  ADD PRIMARY KEY (`username`),
+  ADD PRIMARY KEY (`idristoratore`),
   ADD UNIQUE KEY `iduser` (`iduser`),
   ADD KEY `fk_utente_ristoratore` (`iduser`);
+
+--
+-- Indici per le tabelle `servizi`
+--
+ALTER TABLE `servizi`
+  ADD PRIMARY KEY (`idservizio`),
+  ADD KEY `fk_az_servizi` (`idazienda`);
 
 --
 -- Indici per le tabelle `utente`
@@ -8804,12 +8830,27 @@ ALTER TABLE `utente`
 -- AUTO_INCREMENT per la tabella `aziendafornitrice`
 --
 ALTER TABLE `aziendafornitrice`
-  MODIFY `idazienda` int(50) NOT NULL AUTO_INCREMENT;
+  MODIFY `idazienda` bigint(50) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT per la tabella `candidato`
+--
+ALTER TABLE `candidato`
+  MODIFY `idcandidato` bigint(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT per la tabella `candidatura`
 --
 ALTER TABLE `candidatura`
-  MODIFY `idcandidatura` int(50) NOT NULL AUTO_INCREMENT;
+  MODIFY `idcandidatura` bigint(50) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT per la tabella `esperienza`
+--
+ALTER TABLE `esperienza`
+  MODIFY `idesperienza` bigint(50) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT per la tabella `fornitore`
+--
+ALTER TABLE `fornitore`
+  MODIFY `idfornitore` bigint(50) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT per la tabella `login`
 --
@@ -8821,10 +8862,25 @@ ALTER TABLE `login`
 ALTER TABLE `offerta`
   MODIFY `idofferta` bigint(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
+-- AUTO_INCREMENT per la tabella `prodotti`
+--
+ALTER TABLE `prodotti`
+  MODIFY `idprodotto` bigint(50) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT per la tabella `ristorante`
 --
 ALTER TABLE `ristorante`
-  MODIFY `idristorante` int(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `idristorante` bigint(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT per la tabella `ristoratore`
+--
+ALTER TABLE `ristoratore`
+  MODIFY `idristoratore` bigint(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT per la tabella `servizi`
+--
+ALTER TABLE `servizi`
+  MODIFY `idservizio` bigint(50) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT per la tabella `utente`
 --
@@ -8835,10 +8891,29 @@ ALTER TABLE `utente`
 --
 
 --
+-- Limiti per la tabella `aziendafornitrice`
+--
+ALTER TABLE `aziendafornitrice`
+  ADD CONSTRAINT `fk_az_fornitore` FOREIGN KEY (`idfornitore`) REFERENCES `fornitore` (`idfornitore`);
+
+--
 -- Limiti per la tabella `candidato`
 --
 ALTER TABLE `candidato`
   ADD CONSTRAINT `fk_utente_candidato` FOREIGN KEY (`iduser`) REFERENCES `utente` (`iduser`);
+
+--
+-- Limiti per la tabella `candidatura`
+--
+ALTER TABLE `candidatura`
+  ADD CONSTRAINT `fk_offertac` FOREIGN KEY (`idofferta`) REFERENCES `offerta` (`idofferta`),
+  ADD CONSTRAINT `fk_utente_candidaton` FOREIGN KEY (`idcandidato`) REFERENCES `candidato` (`idcandidato`);
+
+--
+-- Limiti per la tabella `esperienza`
+--
+ALTER TABLE `esperienza`
+  ADD CONSTRAINT `fk_esperienza_candidato` FOREIGN KEY (`idcandidato`) REFERENCES `candidato` (`idcandidato`);
 
 --
 -- Limiti per la tabella `fornitore`
@@ -8847,10 +8922,34 @@ ALTER TABLE `fornitore`
   ADD CONSTRAINT `fk_utente_fornitore` FOREIGN KEY (`iduser`) REFERENCES `utente` (`iduser`);
 
 --
+-- Limiti per la tabella `offerta`
+--
+ALTER TABLE `offerta`
+  ADD CONSTRAINT `fk_offerta_ristorante` FOREIGN KEY (`idristorante`) REFERENCES `ristorante` (`idristorante`);
+
+--
+-- Limiti per la tabella `prodotti`
+--
+ALTER TABLE `prodotti`
+  ADD CONSTRAINT `fk_az_prodotti` FOREIGN KEY (`idazienda`) REFERENCES `aziendafornitrice` (`idazienda`);
+
+--
+-- Limiti per la tabella `ristorante`
+--
+ALTER TABLE `ristorante`
+  ADD CONSTRAINT `fk_rist_ristoratore` FOREIGN KEY (`idristoratore`) REFERENCES `ristoratore` (`idristoratore`);
+
+--
 -- Limiti per la tabella `ristoratore`
 --
 ALTER TABLE `ristoratore`
   ADD CONSTRAINT `fk_utente_ristoratore` FOREIGN KEY (`iduser`) REFERENCES `utente` (`iduser`);
+
+--
+-- Limiti per la tabella `servizi`
+--
+ALTER TABLE `servizi`
+  ADD CONSTRAINT `fk_az_servizi` FOREIGN KEY (`idazienda`) REFERENCES `aziendafornitrice` (`idazienda`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
