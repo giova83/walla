@@ -58,7 +58,8 @@ public class ProductDao extends AbsDao {
 	
 	
     // Ottieni singolo prodotto (READ-SELECT)
-	public Product getProduct(String idprodotto) throws WallaDBException{
+	public Product getProduct(String idprodotto) throws WallaDBException
+	{
     	LOGGER.info("UserDao.getProduct - START");
     	String sql = "SELECT "
     			+ "p.titolo as TITOLO,"
@@ -189,7 +190,8 @@ public class ProductDao extends AbsDao {
 	
 
 	    // aggiorna singolo prodotto (UPDATE)
-		   public void productUpdate(Product product) throws WallaDBException {
+		   public void productUpdate(Product product) throws WallaDBException 
+		   {
 			   LOGGER.info("Product.UpdateProduct - START");
 			   
 			   try {
@@ -256,7 +258,7 @@ public class ProductDao extends AbsDao {
 				}
 			   		 
 			   	 } 
-	   
+	   // Aggiungi nuovo Prodotto
 		   public void productAdd(Product product) throws WallaDBException {
 				LOGGER.info("Product.InsertProduct - START");
 	        try{	
