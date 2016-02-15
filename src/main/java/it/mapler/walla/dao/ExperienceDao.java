@@ -49,7 +49,7 @@ public class ExperienceDao extends AbsDao {
 	
 	
     // Ottieni singola esperienza (READ-SELECT)
-	public Experience getExperience(String iduser, String username) throws WallaDBException
+	public Experience getExperience(String username, String idesperienza) throws WallaDBException
 	{
     	LOGGER.info("ExperienceDao.getExperience - START");
     	String sql = "SELECT "
@@ -63,9 +63,9 @@ public class ExperienceDao extends AbsDao {
     			+ TABLE_CANDIDATO+" as C, "
     			+ TABLE_UTENTE+" as U "
     			+ "WHERE "
-    		    + ""+TABLE_ESPERIENZA+".idcandidato ="+ TABLE_CANDIDATO+".idcandidato = ?"
+    		    + ""+TABLE_ESPERIENZA+".idcandidato ="+ TABLE_CANDIDATO+".idcandidato "
 		        + "and"
-    		    + ""+TABLE_CANDIDATO+".iduser ="+ TABLE_UTENTE+".iduser = ?"
+    		    + ""+TABLE_CANDIDATO+".iduser ="+ TABLE_UTENTE+".iduser "
     		    + "and"
 	            + ""+TABLE_ESPERIENZA+".idesperienza = ?"
 	            + "and"
@@ -73,9 +73,9 @@ public class ExperienceDao extends AbsDao {
     	
     	Experience experience = null; 
 		try{
-			experience = jdbcTemplate.queryForObject(sql, new Object[] { iduser, username }, new ExperienceRowMapper());
+			experience = jdbcTemplate.queryForObject(sql, new Object[] { username, idesperienza }, new ExperienceRowMapper());
 		}catch(EmptyResultDataAccessException ede){
-			LOGGER.info(iduser + "not found");
+			LOGGER.info(username + "not found");
 		    return experience; 
 		}catch(Exception e){
 			LOGGER.error("Error in ExperienceDao.getExperience:"+e.getMessage(),e);

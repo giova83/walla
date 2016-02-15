@@ -26,7 +26,8 @@ public class CandidateDao extends AbsDao {
 	private static final String TABLE_UTENTE = "utente";
 	private static final String TABLE_CANDIDATO = "candidato";
 	
-	private class CandidateRowMapper implements RowMapper<Candidate>{
+	private class CandidateRowMapper implements RowMapper<Candidate>
+	{
 
 		@Override
 		public Candidate mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -51,12 +52,13 @@ public class CandidateDao extends AbsDao {
 	
 	
     // Ottieni singolo candidato (READ-SELECT)
-	public Candidate getCandidate(String iduser, String username) throws WallaDBException{
+	public Candidate getCandidate(String iduser, String username) throws WallaDBException
+	{
     	LOGGER.info("UserDao.getOffer - START");
     	String sql = "SELECT "
     			+ "c.nome as NOME,"
     			+ "c.cognome as COGNOME,"
-    			+ "c.indirizzo as INDIRIZZO"
+    			+ "c.indirizzo as INDIRIZZO, "
     			+ "c.regione as REGIONE,"
     			+ "c.provincia as PROVINCIA,"
     			+ "c.citta as CITTA,"
@@ -65,11 +67,16 @@ public class CandidateDao extends AbsDao {
     			+ "c.cellulare as CELLULARE,"
     			+ "c.datanascita as DATANASCITA,"
     			+ "c.anniesperienza as ANNIESPERIENZA"
-    			+ "FROM "+TABLE_CANDIDATO+" as C"
+    			+ "FROM "+TABLE_CANDIDATO+" as C , "
+    			+ TABLE_UTENTE+" as U "
     			+ "WHERE "
     			+ ""+TABLE_CANDIDATO+".iduser = ?"
     			+ "and"
-    		    + ""+TABLE_CANDIDATO+".username = ?";
+    			+ ""+TABLE_CANDIDATO+".iduser = "+TABLE_UTENTE+".iduser"
+    			+ "and"
+    			+ ""+TABLE_CANDIDATO+".idesperienza = ?"
+    			+ "and"
+    		    + ""+TABLE_UTENTE+".username = ?";
     	
     	Candidate candidato = null; 
 		try{
