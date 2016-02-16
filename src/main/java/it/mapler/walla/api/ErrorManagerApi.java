@@ -1,6 +1,6 @@
 package it.mapler.walla.api;
 
-import it.mapler.walla.api.response.ErrorStatusResponse;
+import it.mapler.walla.api.response.StatusResponse;
 import it.mapler.walla.enumeration.STATUS;
 
 import org.slf4j.Logger;
@@ -18,18 +18,18 @@ public class ErrorManagerApi {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ErrorManagerApi.class);
 
 	@RequestMapping(value="/invalidToken", method = RequestMethod.GET)
-	private @ResponseBody  ErrorStatusResponse invalidToken(){
+	private @ResponseBody  StatusResponse invalidToken(){
 		 LOGGER.info("ErrorHandlerApi.ErrorStatusResponse - START");
-         ErrorStatusResponse errorStatus = new ErrorStatusResponse();
+         StatusResponse errorStatus = new StatusResponse();
 	     errorStatus.setStatusError(STATUS.ERROR_TOKEN,"Invalid token");
 		return errorStatus;
 
 	}
 
 	@RequestMapping(value="/errorCheckToken", method = RequestMethod.GET)
-	private @ResponseBody ErrorStatusResponse errorCheckToken(){
+	private @ResponseBody StatusResponse errorCheckToken(){
 		 LOGGER.info("ErrorHandlerApi.ErrorStatusResponse - START");
-         ErrorStatusResponse errorStatus = new ErrorStatusResponse();
+         StatusResponse errorStatus = new StatusResponse();
 	     errorStatus.setStatusError(STATUS.ERROR_TOKEN,"Error check token");
 		return errorStatus;
 

@@ -8,7 +8,7 @@ import com.mysql.jdbc.CacheAdapter;
 import it.mapler.walla.enumeration.PROFILE;
 
 public class Offer {
-	
+
 	private Long idofferta;
 	private Long idristorante;
 	private String nome;
@@ -19,12 +19,13 @@ public class Offer {
 	private String tipologia;
 	private String titolo;
 	private Calendar datapubblicazione;
-	
+	private Integer attiva;
+
 	public Offer() {
 		super();
-		
+
 	}
-	
+
 	public Long getIdofferta() {
 		return idofferta;
 	}
@@ -91,9 +92,17 @@ public class Offer {
 	public void setCitta(String citta) {
 		this.citta = citta;
 	}
-	
 
-	
-	
+	public Integer getAttiva() {
+		return attiva;
+	}
+
+	public void setAttiva(Integer attiva) {
+		this.attiva = attiva;
+	}
+
+
+
+
 
 }
