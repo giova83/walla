@@ -32,7 +32,8 @@ public class ProductDao extends AbsDao {
 	private static final String TABLE_PRODOTTO = "prodotti";
 	
 	
-	private class ProductRowMapper implements RowMapper<Product>{
+	private class ProductRowMapper implements RowMapper<Product>
+	{
 
 		@Override
 		public Product mapRow(ResultSet rs, int rowNum) throws SQLException {

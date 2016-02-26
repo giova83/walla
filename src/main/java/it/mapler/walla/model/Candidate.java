@@ -10,7 +10,7 @@ public class Candidate {
 	private String nome;
 	private String cognome;
 	private String cellulare;
-	private String idcandidato;
+	private Long idcandidato;
 	private String cv;
 	private String indirizzo;
 	private String provincia;
@@ -51,10 +51,11 @@ public class Candidate {
 	public void setCellulare(String cellulare) {
 		this.cellulare = cellulare;
 	}
-	public String getIdcandidato() {
+     
+	public Long getIdcandidato() {
 		return idcandidato;
 	}
-	public void setIdcandidato(String idcandidato) {
+	public void setIdcandidato(Long idcandidato) {
 		this.idcandidato = idcandidato;
 	}
 	public String getCv() {

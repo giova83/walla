@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Creato il: Feb 10, 2016 alle 20:53
+-- Creato il: Feb 17, 2016 alle 21:10
 -- Versione del server: 5.6.26
 -- Versione PHP: 5.5.28
 
@@ -81,7 +81,8 @@ CREATE TABLE IF NOT EXISTS `candidatura` (
   `idcandidatura` bigint(50) NOT NULL,
   `idcandidato` bigint(50) NOT NULL,
   `descrizione` text NOT NULL,
-  `idofferta` bigint(50) NOT NULL
+  `idofferta` bigint(50) NOT NULL,
+  `datacandidatura` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -8255,7 +8256,7 @@ CREATE TABLE IF NOT EXISTS `login` (
   `username` varchar(50) NOT NULL,
   `dataultimamodifica` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `idlogin` int(50) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dump dei dati per la tabella `login`
@@ -8267,7 +8268,8 @@ INSERT INTO `login` (`dataaccesso`, `token`, `username`, `dataultimamodifica`, `
 ('2016-01-13 21:41:19', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInByb2ZpbGUiOiJBZG1pbiIsImlhdCI6MTQ1MjcyMTI3OH0.wMaZKVKTit7sjaSJ2BhjWdhvfYKJkdRCQBT2L7z_7pY', 'admin', '2016-01-13 21:41:19', 3),
 ('2016-01-13 22:21:06', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInByb2ZpbGUiOiJBZG1pbiIsImlhdCI6MTQ1MjcyMzY2Nn0.W4uIUP7ps-whL3IMFu5PDOKHBjQftn-oW14gv7IBIQs', 'admin', '2016-01-13 22:21:06', 4),
 ('2016-01-21 22:09:06', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwicHJvZmlsZSI6IkFkbWluIiwiaWF0IjoxNDUzNDE0MTQ2fQ.EAErLbwA6P6ER0H-rcwHuhvIAcTTJ0G7cDalC4FCCoo', 'admin', '2016-01-21 22:09:06', 5),
-('2016-01-25 23:21:15', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInByb2ZpbGUiOiJBZG1pbiIsImlhdCI6MTQ1Mzc2NDA3NH0.ChazkBr2NfxnA79eybDrpat8FGKW1grNVi29tnF4FXU', 'admin', '2016-01-25 23:21:15', 6);
+('2016-01-25 23:21:15', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInByb2ZpbGUiOiJBZG1pbiIsImlhdCI6MTQ1Mzc2NDA3NH0.ChazkBr2NfxnA79eybDrpat8FGKW1grNVi29tnF4FXU', 'admin', '2016-01-25 23:21:15', 6),
+('2016-02-16 22:10:43', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI1IiwicHJvZmlsZSI6IkFkbWluIiwiaWF0IjoxNDU1NjYwNjQyfQ.PXKZCLgtHIa4diPVcGlpU4-FAd5fudSo0ImesBqtv34', 'admin', '2016-02-16 22:10:43', 7);
 
 -- --------------------------------------------------------
 
@@ -8284,14 +8286,15 @@ CREATE TABLE IF NOT EXISTS `offerta` (
   `datapubblicazione` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `idristorante` bigint(50) NOT NULL,
   `offerta_attiva` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dump dei dati per la tabella `offerta`
 --
 
 INSERT INTO `offerta` (`idofferta`, `descrizione`, `categoria`, `tipologia`, `titolo`, `datapubblicazione`, `idristorante`, `offerta_attiva`) VALUES
-(1, 'descrizione', 'categoria', 'tipologia', 'titolo', '2016-01-21 23:33:20', 3, 0);
+(1, 'descrizione', 'categoria', 'tipologia', 'titolo', '2016-01-21 23:33:20', 3, 0),
+(2, 'descrizione3', 'categoria', 'tipologia', 'titolo2', '2016-02-16 22:16:18', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -8855,12 +8858,12 @@ ALTER TABLE `fornitore`
 -- AUTO_INCREMENT per la tabella `login`
 --
 ALTER TABLE `login`
-  MODIFY `idlogin` int(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `idlogin` int(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT per la tabella `offerta`
 --
 ALTER TABLE `offerta`
-  MODIFY `idofferta` bigint(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `idofferta` bigint(50) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT per la tabella `prodotti`
 --

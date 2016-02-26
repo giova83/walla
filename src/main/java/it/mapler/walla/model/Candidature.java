@@ -11,8 +11,29 @@ public class Candidature {
 	Long idcandidato;    //fk
 	Long idofferta;      //fk
 	String descrizione;
+	Calendar datacandidatura;
+	Offer offerta;
+	Restaurant ristorante;
 	
-	
+	public Offer getOfferta() {
+		return offerta;
+	}
+	public void setOfferta(Offer offerta) {
+		this.offerta = offerta;
+		
+	}
+	public Restaurant getRistorante() {
+		return ristorante;
+	}
+	public void setRistorante(Restaurant ristorante) {
+		this.ristorante = ristorante;
+	}
+	public Calendar getDatacandidatura() {
+		return datacandidatura;
+	}
+	public void setDatacandidatura(Calendar datacandidatura) {
+		this.datacandidatura = datacandidatura;
+	}
 	public Long getIdcandidatura() {
 		return idcandidatura;
 	}

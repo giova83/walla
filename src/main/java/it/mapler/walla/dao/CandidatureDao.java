@@ -2,7 +2,9 @@ package it.mapler.walla.dao;
 
 import it.mapler.walla.exception.WallaDBException;
 import it.mapler.walla.model.Candidature;
+import it.mapler.walla.model.Offer;
 import it.mapler.walla.model.Product;
+import it.mapler.walla.model.Restaurant;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class CandidatureDao extends AbsDao {
 
 private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class);
@@ -25,6 +29,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 	private static final String TABLE_CANDIDATO = "candidato";	
 	private static final String TABLE_CANDIDATURA = "candidatura";	
 	private static final String TABLE_OFFERTA = "offerta";
+	private static final String TABLE_RISTORANTE = "ristorante";
 
 	
 	private class CandidatureRowMapper implements RowMapper<Candidature>
@@ -33,13 +38,19 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 		@Override
 		public Candidature mapRow(ResultSet rs, int rowNum) throws SQLException {
 			// TODO Auto-generated method stub
-			Candidature canidatura = new Candidature();
-			canidatura.setIdcandidatura(rs.getLong("idcandidatura"));
-			canidatura.setIdcandidato(rs.getLong("idcandidato"));
-			canidatura.setIdofferta(rs.getLong("idofferta"));
-			canidatura.setDescrizione(rs.getString("descrizione"));
+			Candidature candidatura = new Candidature();
+			candidatura.setIdcandidatura(rs.getLong("idcandidatura"));
+			candidatura.setIdcandidato(rs.getLong("idcandidato"));
+			candidatura.setIdofferta(rs.getLong("idofferta"));
+			candidatura.setDescrizione(rs.getString("descrizione"));
+			Offer offer = new Offer();
+			offer.setTitolo(rs.getString("titolo"));
+			Restaurant ristorante = new Restaurant();
+            ristorante.setNome(rs.getString("nome"));
+            candidatura.setOfferta(offer);	
+            candidatura.setRistorante(ristorante);
 
-			return canidatura;
+			return candidatura;
 		}
   }	
 	
@@ -53,8 +64,8 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
     			+ "c.idcandidato as IDCANDIDATO,"
     			+ "c.idofferta as IDOFFERTA,"
     			+ "c.descrizione as DESCRIZIONE "
-    			+ "FROM "+TABLE_CANDIDATURA+" as C, "
-    			+ TABLE_CANDIDATO+" as CC, "
+    			+ "FROM "+TABLE_CANDIDATURA+" , "
+    			+ TABLE_CANDIDATO+" , "
     			+ TABLE_UTENTE+" as U "
     			+ "WHERE "
     		    + ""+TABLE_CANDIDATURA+".idcandidato ="+ TABLE_CANDIDATO+".idcandidato "
@@ -82,28 +93,31 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 	
 	
     // Ottieni elenco Candidature del Candidato (READ-SELECT)
-	public List<Candidature> getCandidateCandidatures(String userName) throws WallaDBException
+	public List<Candidature> getAllCandidatureByCandidate(Long iduser) throws WallaDBException
 	{
-    	LOGGER.info("CandidatureDao.getCandidateCandidatures - START");
+    	LOGGER.info("CandidatureDao.getAllCandidatureByCandidate - START");
     	String sql = "SELECT "
     			+ "c.idcandidatura as IDCANDIDATURA,"
     			+ "c.idcandidato as IDCANDIDATO,"
     			+ "c.idofferta as IDOFFERTA,"
-    			+ "c.descrizione as DESCRIZIONE "
+    			+ "o.titolo as TITOLO,"
+    			+ "r.nome as NOME,"
+    			+ "c.descrizione as DESCRIZIONE, "
+    			+ "c.datacandidatura as DATACANDIDATURA "
     			+ "FROM "+TABLE_CANDIDATURA+" as C ," +TABLE_CANDIDATO+" CC ,"
-    					+ ""+TABLE_UTENTE+" U ,"+TABLE_OFFERTA+" as O"
-    			+ "WHERE c.idcandidato = cc.idcandidato "
+    					+ ""+TABLE_UTENTE+" as U ,"+TABLE_OFFERTA+" as O, "+TABLE_RISTORANTE+ " as R"
+    			+ " WHERE c.idcandidato = cc.idcandidato and c.idofferta = o.idofferta and o.idristorante = r.idristorante "
     			+ " and u.iduser = cc.iduser "
-    			+ " and "+TABLE_UTENTE+".username = ?" ;
+    			+ " and U.iduser = ?" ;
 
     	List<Candidature> candidatures = null;
 	      try{		 
-	    	  candidatures = jdbcTemplate.query(sql, new Object[] { userName }, new CandidatureRowMapper());
+	    	  candidatures = jdbcTemplate.query(sql, new Object[] { iduser }, new CandidatureRowMapper());
 	    	}catch(Exception e){
-	    		LOGGER.info("error in getCandidateCandidatures :"+e.getMessage(),e);
-	    		throw new WallaDBException("error in getCandidateCandidatures:"+e.getMessage());
+	    		LOGGER.info("error in getAllCandidatureByCandidate :"+e.getMessage(),e);
+	    		throw new WallaDBException("error in getAllCandidatureByCandidate:"+e.getMessage());
 	    	}finally{
-	    		LOGGER.info("CandidatureDao.getCandidateCandidatures  - END");
+	    		LOGGER.info("CandidatureDao.getAllCandidatureByCandidate  - END");
 	    	}
 	      
 	    	return candidatures;
@@ -119,7 +133,8 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 	    			+ "c.idcandidatura as IDCANDIDATURA,"
 	    			+ "c.idcandidato as IDCANDIDATO,"
 	    			+ "c.idofferta as IDOFFERTA,"
-	    			+ "c.descrizione as DESCRIZIONE "
+	    			+ "c.descrizione as DESCRIZIONE, "
+	    			+ "c.datacandidatura as DATACANDIDATURA "
 	    			+ " FROM "+TABLE_CANDIDATURA+" P  WHERE 1=1 AND  ";
 	    	
 	    	//Object[] elenco_parametri = new Object[] {};// QUI
@@ -160,7 +175,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 				String  sqlUpdate = "UPDATE TABLE "+TABLE_CANDIDATURA+ " ";
 	           
 			   if(candidature.getDescrizione() != null && !candidature.getDescrizione().isEmpty())
-			   {sqlUpdate += "SET titolo="+candidature.getDescrizione() ;
+			   {sqlUpdate += "SET descrizione="+candidature.getDescrizione() ;
 			      params.add(candidature.getDescrizione());
 			     types.add(Types.VARCHAR);
 			   }

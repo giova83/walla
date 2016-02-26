@@ -16,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class CandidateDao extends AbsDao {
 
 	
@@ -32,14 +34,13 @@ public class CandidateDao extends AbsDao {
 		@Override
 		public Candidate mapRow(ResultSet rs, int rowNum) throws SQLException {
 			// TODO Auto-generated method stub
-			Candidate candidato = new Candidate();
-			candidato.setIduser(rs.getLong("iduser"));
-			candidato.setUsername(rs.getString("username"));
+			Candidate candidato = new Candidate();			
+
 			candidato.setNome(rs.getString("nome"));
 			candidato.setCognome(rs.getString("cognome"));
 			candidato.setCellulare(rs.getString("cellulare"));
-			candidato.setIdcandidato(rs.getString("idcandidato"));
-			candidato.setCv(rs.getString("cv"));
+			candidato.setIdcandidato(rs.getLong("idcandidato"));
+			//TODO candidato.setCv(rs.getString("cv"));
 			candidato.setIndirizzo(rs.getString("indirizzo"));
 			candidato.setProvincia(rs.getString("provincia"));
 			candidato.setRegione(rs.getString("regione"));
@@ -52,10 +53,11 @@ public class CandidateDao extends AbsDao {
 	
 	
     // Ottieni singolo candidato (READ-SELECT)
-	public Candidate getCandidate(String iduser, String username) throws WallaDBException
+	public Candidate getCandidate(Long iduser) throws WallaDBException
 	{
-    	LOGGER.info("UserDao.getOffer - START");
+    	LOGGER.info("UserDao.Candidate - START");
     	String sql = "SELECT "
+    			+ "c.idcandidato as IDCANDIDATO,"
     			+ "c.nome as NOME,"
     			+ "c.cognome as COGNOME,"
     			+ "c.indirizzo as INDIRIZZO, "
@@ -65,22 +67,18 @@ public class CandidateDao extends AbsDao {
     			+ "c.cap as CAP,"
     			+ "c.cv as CV,"
     			+ "c.cellulare as CELLULARE,"
-    			+ "c.datanascita as DATANASCITA,"
-    			+ "c.anniesperienza as ANNIESPERIENZA"
-    			+ "FROM "+TABLE_CANDIDATO+" as C , "
+    			+ "c.datadinascita as DATANASCITA,"
+    			+ "c.annidiesperienza as ANNIESPERIENZA"
+    			+ " FROM "+TABLE_CANDIDATO+" as C , "
     			+ TABLE_UTENTE+" as U "
     			+ "WHERE "
-    			+ ""+TABLE_CANDIDATO+".iduser = ?"
-    			+ "and"
-    			+ ""+TABLE_CANDIDATO+".iduser = "+TABLE_UTENTE+".iduser"
-    			+ "and"
-    			+ ""+TABLE_CANDIDATO+".idesperienza = ?"
-    			+ "and"
-    		    + ""+TABLE_UTENTE+".username = ?";
+    		    + "C.iduser = ?"
+    			+ " and "
+    	        + "C.iduser = U.iduser";
     	
     	Candidate candidato = null; 
 		try{
-			candidato = jdbcTemplate.queryForObject(sql, new Object[] { iduser, username }, new CandidateRowMapper());
+			candidato = jdbcTemplate.queryForObject(sql, new Object[] { iduser }, new CandidateRowMapper());
 		}catch(EmptyResultDataAccessException ede){
 			LOGGER.info(iduser + "not found");
 		    return candidato; 
