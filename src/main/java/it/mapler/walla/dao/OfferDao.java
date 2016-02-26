@@ -185,7 +185,7 @@ public class OfferDao extends AbsDao {
 
 		   	 }
 
-	   public void offerDelete(String idOfferta) throws WallaDBException {
+	   public void offerDelete(Long idOfferta) throws WallaDBException {
 			LOGGER.info("Offer.DeleteOffer - START");
 		try{
 		String  sqlDelete = "DELETE FROM "+TABLE_OFFER+" WHERE idofferta = ?";

@@ -12,6 +12,7 @@ import it.mapler.walla.services.OfferService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,9 +42,20 @@ public class OfferApi {
 
 	 @RequestMapping( method = RequestMethod.POST)
 	 public @ResponseBody StatusResponse addOffer(@RequestBody OfferRequest offerRequest ){
-		 LOGGER.info("OfferApi.login - START");
+		 LOGGER.info("OfferApi.addOffer - START");
 		 try{
 			return offerService.addOffer(offerRequest);
+		 }finally{
+			 LOGGER.info("OfferApi.login - END");
+		 }
+
+	 }
+
+	 @RequestMapping(value="/{idOffer}", method = RequestMethod.DELETE)
+	 public @ResponseBody StatusResponse deleteOffer(@PathVariable("idOffer") String idOffer){
+		 LOGGER.info("OfferApi.deleteOffer - START");
+		 try{
+			return offerService.deleteOffer(idOffer);
 		 }finally{
 			 LOGGER.info("OfferApi.login - END");
 		 }

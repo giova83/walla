@@ -149,5 +149,36 @@ public class OfferService extends AbsService{
 
 	}
 
+	public StatusResponse deleteOffer(String idOffer) {
+
+		LOGGER.info("OfferServices.deleteOffer - START");
+		StatusResponse statusResponse = new StatusResponse();
+		 try{
+
+	         LOGGER.info("delete offer with id: "+idOffer);
+
+	         TransactionStatus status = transactionManager.getTransaction(getTransactionDefinition());
+
+	         offerDao.offerDelete(Long.valueOf(idOffer));
+
+	         transactionManager.commit(status);
+
+	         statusResponse.setStatusOK();
+
+	        return statusResponse;
+
+		  }catch(WallaDBException we){
+			  LOGGER.error(we.getMessage(),we);
+			  statusResponse.setStatusError(STATUS.ERROR_DB, we.getMessage());
+			  return statusResponse;
+		  }catch(Exception e){
+			  LOGGER.error(e.getMessage(),e);
+		      statusResponse.setStatusError(STATUS.ERROR_UNEXPECTED, e.getMessage());
+			  return statusResponse;
+		  }finally{
+			  LOGGER.info("OfferServices.addOffer - END");
+		  }
+	}
+
 
 }
