@@ -16,7 +16,6 @@ import it.mapler.walla.enumeration.STATUS;
 import it.mapler.walla.exception.WallaDBException;
 import it.mapler.walla.model.Candidate;
 import it.mapler.walla.model.Candidature;
-import it.mapler.walla.model.Offer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

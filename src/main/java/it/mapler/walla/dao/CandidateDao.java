@@ -201,7 +201,7 @@ public class CandidateDao extends AbsDao {
 			LOGGER.error("Error in Candidate.InsertCandidate[" + candidato + "]: " + e.getMessage(), e);
 		    throw new WallaDBException("Error in Candidate.InsertCandidate[" + candidato + "]:" + e.getMessage());
 		}finally{
-			LOGGER.info("Offer.InsertCandidate - END");
+			LOGGER.info("Candidate.InsertCandidate - END");
 		}
         
 	   } 

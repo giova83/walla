@@ -14,7 +14,29 @@ public class Product {
 	  String categoria;
 	  String descrizione;
 	  Calendar datapubblicazione;
-	  double costo;
+	  String foto;
+	  double prezzoofferta;
+	  String provenienza;
+	  
+	  public String getFoto() {
+		return foto;
+	}
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+	public double getPrezzoofferta() {
+		return prezzoofferta;
+	}
+	public void setPrezzoofferta(double prezzoofferta) {
+		this.prezzoofferta = prezzoofferta;
+	}
+	public String getProvenienza() {
+		return provenienza;
+	}
+	public void setProvenienza(String provenienza) {
+		this.provenienza = provenienza;
+	}
+	double costo;
 	  double quantita;
 	  boolean prodotto_attivo;
 	  

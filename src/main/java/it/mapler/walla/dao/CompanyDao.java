@@ -4,13 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 
-import it.mapler.walla.enumeration.PROFILE;
 import it.mapler.walla.exception.WallaDBException;
 import it.mapler.walla.model.Company;
 
@@ -21,7 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-
+@Repository
 public class CompanyDao extends AbsDao {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDao.class);
@@ -60,6 +55,8 @@ public class CompanyDao extends AbsDao {
 	public Company getCompany(String idazienda) throws WallaDBException{
     	LOGGER.info("UserDao.getOffer - START");
     	String sql = "SELECT "
+    			+ "a.idazienda as IDAZIENDA,"
+    			+ "f.idfornitore as IDFORNITORE,"
     			+ "a.nome as NOME,"
     			+ "a.cellulare as CELLULARE,"
     			+ "a.categoria as CATEGORIA,"
@@ -92,13 +89,15 @@ public class CompanyDao extends AbsDao {
 	
 	
     // Ottieni elenco aziende del fornitore (READ-SELECT)
-	public List<Company> getSupplierCompany(String userName) throws WallaDBException{
+	public List<Company> getSupplierCompany(Long userName) throws WallaDBException{
     	LOGGER.info("CompanyDao.getSupplierCompanies - START");
     	String sql = "SELECT "
+    			+ "a.idazienda as IDAZIENDA,"
+    			+ "f.idfornitore as IDFORNITORE,"
     			+ "a.nome as NOME,"
     			+ "a.cellulare as CELLULARE,"
     			+ "a.categoria as CATEGORIA,"
-    			+ "a.indirizzo as INDIRIZZO"
+    			+ "a.indirizzo as INDIRIZZO,"
     			+ "a.citta as CITTA,"
     			+ "a.provincia as PROVINCIA,"
     			+ "a.regione as REGIONE,"
@@ -108,7 +107,7 @@ public class CompanyDao extends AbsDao {
     			+ "a.partitaiva as PARTITAIVA "
     			+ "FROM "+TABLE_AZIENDAFORNITRICE+" as A ," +TABLE_FORNITORE+" F ,"+TABLE_UTENTE+" U "
     			+ "WHERE a.idfornitore = f.idfornitore and u.iduser = f.iduser "
-    			+ " and "+TABLE_UTENTE+".username = ?" ;
+    			+ " and u.iduser = ?" ;
 
     	List<Company> companies = null;
 	      try{		 
@@ -279,11 +278,11 @@ public class CompanyDao extends AbsDao {
 				LOGGER.info("Company.InsertCompany - START");
 	        try{	
 			String  sqlAdd = "INSERT INTO "+ TABLE_AZIENDAFORNITRICE + 
-								" (idazienda, idfornitore, nome, cellulare, categoria, indirizzo, citta, "
+								" ( idfornitore, nome, cellulare, categoria, indirizzo, citta, "
 								+ "provincia, regione, cap, latitudine, longitudine, partitaiva) " +
-								"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )" ;
+								"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )" ;
 			      
-			Object[] params = {company.getIdazienda(), company.getIdfornitore(), company.getNome(), company.getCellulare(),
+			Object[] params = { company.getIdfornitore(), company.getNome(), company.getCellulare(),
 					company.getCategoria(), company.getIndirizzo(), company.getCitta(), company.getCitta(), company.getProvincia(),
 					company.getRegione(), company.getCap(), company.getLatitudine(),company.getLongitudine(), company.getPartitaiva()
 					};   	  
@@ -306,5 +305,26 @@ public class CompanyDao extends AbsDao {
 			}
 	        
 		   } 
+		   
+		   
+		   public void companyDelete(Long idCompany) throws WallaDBException {
+				LOGGER.info("Offer.DeleteOffer - START");
+			try{
+			String  sqlDelete = "DELETE FROM "+TABLE_AZIENDAFORNITRICE+" WHERE idazienda = ?";
+			Object[] params = {idCompany};
+			int[] types = { Types.VARCHAR};
+
+			jdbcTemplate.update(sqlDelete,params,types);
+			LOGGER.info(idCompany +"deleted from the table " +TABLE_AZIENDAFORNITRICE);
+		      } catch (Exception e) {
+						LOGGER.error(e.getMessage(), e);
+						LOGGER.error("Error in Company.DeleteCompany[" + idCompany + "]: " + e.getMessage(), e);
+					    throw new WallaDBException("Error in Company.DeleteCompany[" + idCompany + "]:" + e.getMessage());
+					}finally{
+						LOGGER.info("Company.DeleteCompany - END");
+					}
+			   	 }
+		   
+		   
 	
 }

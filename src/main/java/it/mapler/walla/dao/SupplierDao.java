@@ -14,7 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
+
+@Repository
 public class SupplierDao extends AbsDao {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SupplierDao.class);
@@ -22,7 +25,7 @@ public class SupplierDao extends AbsDao {
 	private static final String TABLE_UTENTE = "utente";	
 	private static final String TABLE_FORNITORE = "fornitore";
 
-	
+
 	private class SupplierRowMapper implements RowMapper<Supplier>
 	{
 
@@ -48,7 +51,7 @@ public class SupplierDao extends AbsDao {
 		
 	  }	
 		   // Ottieni singolo Fornitore (READ-SELECT)
-		public Supplier getSupplier(String idfornitore) throws WallaDBException
+		public Supplier getSupplier(Long idfornitore) throws WallaDBException
 		{
 	    	LOGGER.info("UserDao.getProduct - START");
 	    	String sql = "SELECT "

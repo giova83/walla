@@ -16,7 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class ServiceDao extends AbsDao {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceDao.class);
@@ -26,7 +28,7 @@ public class ServiceDao extends AbsDao {
 	private static final String TABLE_FORNITORE = "fornitore";
 	private static final String TABLE_SERVIZIO = "servizi";
 	
-	
+
 	private class ServiceRowMapper implements RowMapper<Service>{
 
 		@Override

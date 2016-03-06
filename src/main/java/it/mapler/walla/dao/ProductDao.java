@@ -21,7 +21,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-
+@Repository
 public class ProductDao extends AbsDao {
 	
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductDao.class);
@@ -31,7 +31,7 @@ public class ProductDao extends AbsDao {
 	private static final String TABLE_FORNITORE = "fornitore";
 	private static final String TABLE_PRODOTTO = "prodotti";
 	
-	
+
 	private class ProductRowMapper implements RowMapper<Product>
 	{
 
