@@ -37,7 +37,7 @@ public class SupplierDao extends AbsDao {
 			supplier.setIduser(rs.getLong("iduser"));
 			supplier.setNome(rs.getString("nome"));
 			supplier.setCognome(rs.getString("cognome"));
-			supplier.setCellulare(rs.getString("celullare"));
+			supplier.setCellulare(rs.getString("cellulare"));
 			supplier.setCategoria(rs.getString("categoria"));
 			supplier.setIndirizzo("indirizzo");
 			supplier.setCitta(rs.getString("citta"));
@@ -56,6 +56,8 @@ public class SupplierDao extends AbsDao {
 	    	LOGGER.info("UserDao.getProduct - START");
 	    	String sql = "SELECT "
 	    			+ "f.nome as NOME,"
+	    			+ "f.idfornitore as IDFORNITORE,"
+	    			+ "f.iduser as IDUSER,"
 	    			+ "f.cognome as COGNOME,"
 	    			+ "f.cellulare as CELLULARE,"
 	    			+ "f.categoria as CATEGORIA,"
@@ -65,9 +67,9 @@ public class SupplierDao extends AbsDao {
 	    			+ "f.latitudine as LATITUDINE,"
 	    			+ "f.longitudine as LONGITUDINE,"
 	    			+ "f.cap as CAP"
-	    			+ "FROM "+TABLE_FORNITORE+" as F"
-	    			+ "WHERE "
-	    			+ ""+TABLE_FORNITORE+".idfornitore = ?" ;
+	    			+ " FROM "+TABLE_FORNITORE+" as F"
+	    			+ " WHERE "
+	    			+ " F.iduser = ?" ;
 
 	    	Supplier supplier = null; 
 			try{

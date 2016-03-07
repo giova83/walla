@@ -283,15 +283,15 @@ public class CompanyDao extends AbsDao {
 								"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )" ;
 			      
 			Object[] params = { company.getIdfornitore(), company.getNome(), company.getCellulare(),
-					company.getCategoria(), company.getIndirizzo(), company.getCitta(), company.getCitta(), company.getProvincia(),
+					company.getCategoria(), company.getIndirizzo(), company.getCitta(), company.getProvincia(),
 					company.getRegione(), company.getCap(), company.getLatitudine(),company.getLongitudine(), company.getPartitaiva()
 					};   	  
 		             
 			LOGGER.info(company +"added to the table " +TABLE_AZIENDAFORNITRICE);
 			 
-			int[] types = { Types.BIGINT, Types.BIGINT, Types.VARCHAR, Types.VARCHAR,
+			int[] types = { Types.BIGINT, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
 					Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
-					Types.VARCHAR, Types.DECIMAL, Types.DECIMAL,Types.VARCHAR };	
+					Types.DECIMAL, Types.DECIMAL,Types.VARCHAR };	
 		   
 			jdbcTemplate.update(sqlAdd,params,types);
 			LOGGER.info(company +"added to the table " +TABLE_AZIENDAFORNITRICE);
