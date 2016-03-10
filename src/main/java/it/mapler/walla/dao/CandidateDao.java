@@ -21,20 +21,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CandidateDao extends AbsDao {
 
-	
+
     private static final Logger LOGGER = LoggerFactory.getLogger(CandidateDao.class);
-	
+
 	private static final String TABLE_LOGIN = "login";
 	private static final String TABLE_UTENTE = "utente";
 	private static final String TABLE_CANDIDATO = "candidato";
-	
+
 	private class CandidateRowMapper implements RowMapper<Candidate>
 	{
 
 		@Override
 		public Candidate mapRow(ResultSet rs, int rowNum) throws SQLException {
 			// TODO Auto-generated method stub
-			Candidate candidato = new Candidate();			
+			Candidate candidato = new Candidate();
 
 			candidato.setNome(rs.getString("nome"));
 			candidato.setCognome(rs.getString("cognome"));
@@ -50,8 +50,8 @@ public class CandidateDao extends AbsDao {
 			return candidato;
 		}
   }
-	
-	
+
+
     // Ottieni singolo candidato (READ-SELECT)
 	public Candidate getCandidate(Long iduser) throws WallaDBException
 	{
@@ -75,32 +75,32 @@ public class CandidateDao extends AbsDao {
     		    + "C.iduser = ?"
     			+ " and "
     	        + "C.iduser = U.iduser";
-    	
-    	Candidate candidato = null; 
+
+    	Candidate candidato = null;
 		try{
 			candidato = jdbcTemplate.queryForObject(sql, new Object[] { iduser }, new CandidateRowMapper());
 		}catch(EmptyResultDataAccessException ede){
 			LOGGER.info(iduser + "not found");
-		    return candidato; 
+		    return candidato;
 		}catch(Exception e){
 			LOGGER.error("Error in CandidatoDao.getCandidato:"+e.getMessage(),e);
 			throw new WallaDBException(e.getMessage());
 		}finally{
-			LOGGER.info("CandidatoDao.getCandidato - END");	
+			LOGGER.info("CandidatoDao.getCandidato - END");
 		}
 		return candidato;
 	}
-	
+
     // Aggiorna singolo candidato (UPDATE)
 	   public void candidateUpdate(Candidate candidato) throws WallaDBException {
 		   LOGGER.info("Candidate.UpdateCandidate - START");
-		   
+
 		   try {
            List<Object> params = new ArrayList<Object>();
            List<Integer> types = new ArrayList<Integer>();
-		   
+
 			String  sqlUpdate = "UPDATE TABLE "+TABLE_CANDIDATO+ " ";
-           
+
 		   if(candidato.getNome() != null && !candidato.getNome().isEmpty())
 		   {sqlUpdate += "SET nome="+candidato.getNome()+"," ;
 		      params.add(candidato.getNome());
@@ -158,12 +158,12 @@ public class CandidateDao extends AbsDao {
 		   }
 		   // sistemare la virgola (es. se aggiorno un solo attributo ,)
 		   sqlUpdate += "WHERE "+TABLE_CANDIDATO+".iduser = ?"
-					   + "and" +TABLE_CANDIDATO+".username = ?";	
-		   // update(String sql, Object args, int[] argTypes) 
-		   
+					   + "and" +TABLE_CANDIDATO+".username = ?";
+		   // update(String sql, Object args, int[] argTypes)
+
 			jdbcTemplate.update(sqlUpdate,params,types);
 			LOGGER.info(candidato +"added to the table " +TABLE_CANDIDATO);
-			
+
 		   }catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				LOGGER.error("Error in Candidate.UpdateCandidate[" + candidato + "]: " + e.getMessage(), e);
@@ -171,31 +171,31 @@ public class CandidateDao extends AbsDao {
 			}finally{
 				LOGGER.info("Candidate.UpdateCandidate - END");
 			}
-		   		 
-		   	 } 
-	   
+
+		   	 }
+
 	   // Aggiungi candidato [ADD]
 	   public void candidateAdd(Candidate candidato) throws WallaDBException {
 			LOGGER.info("Candidate.InsertCandidate - START");
-        try{	
-		String  sqlAdd = "INSERT INTO "+ TABLE_CANDIDATO + 
+        try{
+		String  sqlAdd = "INSERT INTO "+ TABLE_CANDIDATO +
 							" (nome, cognome, username, indirizzo, regione, provincia, citta, cap, cv, cellulare, datanascita, anniesperienza) " +
 							"VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )" ;
-		      
+
 		Object[] params = { candidato.getNome(), candidato.getCognome(),candidato.getUsername(),candidato.getIndirizzo(),
 				            candidato.getRegione(), candidato.getProvincia(), candidato.getCitta(), candidato.getCap(),
 				            candidato.getCv(), candidato.getCellulare(), candidato.getDatanascita(), candidato.getAnniesperienza()
-				          };   	  
-	             
+				          };
+
 		LOGGER.info(candidato +"added to the table " +TABLE_CANDIDATO);
-		 
-		int[] types = { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
-				        Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, 
-				        Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.BIGINT };	
-	   
+
+		int[] types = { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+				        Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+				        Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.BIGINT };
+
 		jdbcTemplate.update(sqlAdd,params,types);
 		LOGGER.info(candidato +"added to the table " +TABLE_CANDIDATO);
-		
+
 	   } catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			LOGGER.error("Error in Candidate.InsertCandidate[" + candidato + "]: " + e.getMessage(), e);
@@ -203,9 +203,11 @@ public class CandidateDao extends AbsDao {
 		}finally{
 			LOGGER.info("Candidate.InsertCandidate - END");
 		}
-        
-	   } 
-	
-		
-	
+
+	   }
+
+
+
+
+
 }

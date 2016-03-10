@@ -6,7 +6,7 @@ import it.mapler.walla.enumeration.PROFILE;
 
 
 public class Candidature {
-	
+
 	Long idcandidatura;  //pk
 	Long idcandidato;    //fk
 	Long idofferta;      //fk
@@ -14,13 +14,15 @@ public class Candidature {
 	Calendar datacandidatura;
 	Offer offerta;
 	Restaurant ristorante;
-	
+
+	Candidate candidate;
+
 	public Offer getOfferta() {
 		return offerta;
 	}
 	public void setOfferta(Offer offerta) {
 		this.offerta = offerta;
-		
+
 	}
 	public Restaurant getRistorante() {
 		return ristorante;
@@ -58,8 +60,14 @@ public class Candidature {
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
 	}
-	
-	
-	
+	public Candidate getCandidate() {
+		return candidate;
+	}
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
+	}
+
+
+
 
 }

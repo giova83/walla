@@ -28,22 +28,22 @@ import org.springframework.transaction.TransactionStatus;
 public class CandidatureService extends AbsService{
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CandidatureService.class);
-	
+
 	@Autowired
 	private CandidatureDao candidatureDao;
-	
+
 	@Autowired
 	private CandidateDao candidateDao;
-	
-		
+
+
 	public StatusResponse addCandidature(CandidatureRequest candidatureRequest, String user){
 		LOGGER.info("CandidatureServices.addCandidature - START");
 		StatusResponse statusResponse = new StatusResponse();
 		 try{
 			 LOGGER.info("get candidate for id user: "+user);
 			 Candidate candidate = candidateDao.getCandidate(Long.valueOf(user));
-			 
-			 
+
+
 	         LOGGER.info("save candidature for offerta: "+candidatureRequest.getIdofferta());
 
 	         Candidature candidature = new Candidature();
@@ -76,8 +76,8 @@ public class CandidatureService extends AbsService{
 		  }
 
 	}
-	
-	
+
+
 	public CandidatureResponse getAllCandidatureByCandidate(String user){
 		LOGGER.info("CandidatureServices.getAllCandidatureByCandidate - START");
 		CandidatureResponse candidatureResponse = new CandidatureResponse();
@@ -106,5 +106,34 @@ public class CandidatureService extends AbsService{
 		  }
 
 	}
+
+	public CandidatureResponse getCandidatureForOffer(String idOffer){
+	LOGGER.info("CandidatureServices.getCandidatureForOffer - START");
+	CandidatureResponse candidatureResponse = new CandidatureResponse();
+	List<Candidature> candidatures = null;
+	 try{
+
+         LOGGER.info("search candidature for offer: "+idOffer);
+
+         candidatures = candidatureDao.getCandidatureForOffer(Long.valueOf(idOffer));
+
+         candidatureResponse.setCandidatures(candidatures);
+         candidatureResponse.setStatusOK();
+
+        return candidatureResponse;
+
+	  }catch(WallaDBException we){
+		  LOGGER.error(we.getMessage(),we);
+		  candidatureResponse.setStatusError(STATUS.ERROR_DB, we.getMessage());
+		  return candidatureResponse;
+	  }catch(Exception e){
+		  LOGGER.error(e.getMessage(),e);
+	      candidatureResponse.setStatusError(STATUS.ERROR_UNEXPECTED, e.getMessage());
+		  return candidatureResponse;
+	  }finally{
+		  LOGGER.info("CandidatureServices.getCandidatureForOffer - END");
+	  }
+
+}
 
 }

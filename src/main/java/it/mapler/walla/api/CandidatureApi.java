@@ -14,6 +14,7 @@ import it.mapler.walla.services.CandidatureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,12 +26,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/candidature")
 public class CandidatureApi {
-	
+
 	 private static final Logger LOGGER = LoggerFactory.getLogger(CandidatureApi.class);
 
 	 @Autowired
 	 private CandidatureService candidatureService;
-	 
+
+	 //tutte le candidature di n utente
 	 @RequestMapping( method = RequestMethod.GET)
 	 public @ResponseBody CandidatureResponse getAllCandidature( HttpServletRequest request)
 	 {
@@ -43,7 +45,7 @@ public class CandidatureApi {
 		 }
 
 	 }
-	 
+
 
 	 @RequestMapping(value="/add", method = RequestMethod.POST)
 	 public @ResponseBody StatusResponse addCandidature(@RequestBody CandidatureRequest candidatureRequest, HttpServletRequest request)
@@ -57,6 +59,17 @@ public class CandidatureApi {
 		 }
 
 	 }
-	 
+
+	 //tutti i candidati per offerta lavoro
+	 @RequestMapping(value="/{idOffer}", method = RequestMethod.GET)
+	 public @ResponseBody CandidatureResponse getAllCandidatureForOffer(@PathVariable("idOffer") String idOffer){
+		 LOGGER.info("CandidatureApi.getAllCandidatureForOffer - START");
+		 try{
+			return candidatureService.getCandidatureForOffer(idOffer);
+		 }finally{
+			 LOGGER.info("CandidatureApi.getAllCandidatureForOffer");
+		 }
+
+	 }
 
 }

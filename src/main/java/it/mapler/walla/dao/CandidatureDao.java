@@ -1,6 +1,7 @@
 package it.mapler.walla.dao;
 
 import it.mapler.walla.exception.WallaDBException;
+import it.mapler.walla.model.Candidate;
 import it.mapler.walla.model.Candidature;
 import it.mapler.walla.model.Offer;
 import it.mapler.walla.model.Product;
@@ -24,14 +25,14 @@ import org.springframework.stereotype.Repository;
 public class CandidatureDao extends AbsDao {
 
 private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class);
-	
+
 	private static final String TABLE_UTENTE = "utente";
-	private static final String TABLE_CANDIDATO = "candidato";	
-	private static final String TABLE_CANDIDATURA = "candidatura";	
+	private static final String TABLE_CANDIDATO = "candidato";
+	private static final String TABLE_CANDIDATURA = "candidatura";
 	private static final String TABLE_OFFERTA = "offerta";
 	private static final String TABLE_RISTORANTE = "ristorante";
 
-	
+
 	private class CandidatureRowMapper implements RowMapper<Candidature>
 	{
 
@@ -47,14 +48,14 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 			offer.setTitolo(rs.getString("titolo"));
 			Restaurant ristorante = new Restaurant();
             ristorante.setNome(rs.getString("nome"));
-            candidatura.setOfferta(offer);	
+            candidatura.setOfferta(offer);
             candidatura.setRistorante(ristorante);
 
 			return candidatura;
 		}
-  }	
-	
-	
+  }
+
+
     // Ottieni singola Candidatura (READ-SELECT)
 	public Candidature getCandidature(String idcandidature, String username) throws WallaDBException
 	{
@@ -75,23 +76,23 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 	            + ""+TABLE_CANDIDATURA+".idcandidatura = ?"
 	            + "and"
 	            + TABLE_UTENTE+".username = ?";
-    	
-    	Candidature candidature = null; 
+
+    	Candidature candidature = null;
 		try{
 			candidature = jdbcTemplate.queryForObject(sql, new Object[] { idcandidature, username }, new CandidatureRowMapper());
 		}catch(EmptyResultDataAccessException ede){
 			LOGGER.info(idcandidature + "not found");
-		    return candidature; 
+		    return candidature;
 		}catch(Exception e){
 			LOGGER.error("Error in CandidatureDao.getCandidature:"+e.getMessage(),e);
 			throw new WallaDBException(e.getMessage());
 		}finally{
-			LOGGER.info("CandidatureDao.getCandidature - END");	
+			LOGGER.info("CandidatureDao.getCandidature - END");
 		}
 		return candidature;
 	}
-	
-	
+
+
     // Ottieni elenco Candidature del Candidato (READ-SELECT)
 	public List<Candidature> getAllCandidatureByCandidate(Long iduser) throws WallaDBException
 	{
@@ -111,7 +112,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
     			+ " and U.iduser = ?" ;
 
     	List<Candidature> candidatures = null;
-	      try{		 
+	      try{
 	    	  candidatures = jdbcTemplate.query(sql, new Object[] { iduser }, new CandidatureRowMapper());
 	    	}catch(Exception e){
 	    		LOGGER.info("error in getAllCandidatureByCandidate :"+e.getMessage(),e);
@@ -119,11 +120,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 	    	}finally{
 	    		LOGGER.info("CandidatureDao.getAllCandidatureByCandidate  - END");
 	    	}
-	      
+
 	    	return candidatures;
 	}
-	
-	
+
+
 	// ritorna un elenco di Candidature filtrati per i parametri inseriti
 	   public List<Candidature> findAllCandidaturessByPar(String descrizione)
 					   throws WallaDBException
@@ -136,16 +137,16 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 	    			+ "c.descrizione as DESCRIZIONE, "
 	    			+ "c.datacandidatura as DATACANDIDATURA "
 	    			+ " FROM "+TABLE_CANDIDATURA+" P  WHERE 1=1 AND  ";
-	    	
+
 	    	//Object[] elenco_parametri = new Object[] {};// QUI
 	    	            List<Object> params = new ArrayList<Object>();
-	    	            List<Integer> types = new ArrayList<Integer>(); 
-	    	           
+	    	            List<Integer> types = new ArrayList<Integer>();
+
 	    	            if(descrizione != null && !descrizione.isEmpty())
 	    			   {sql +=" and C.descrizione =  ? " ;
 	    			     params.add(descrizione);
-	    			     types.add(Types.VARCHAR);	    			   
-	    			   }    
+	    			     types.add(Types.VARCHAR);
+	    			   }
 
 	    			   List<Candidature> candidatures = null;
 	      try{
@@ -157,37 +158,37 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 	    	}finally{
 	    		LOGGER.info("CandidatureDAo.findAllCandidaturessByPar - END");
 	    	}
-	      
+
 	    	return candidatures;
 	    }
-	   
-	   
-	   
+
+
+
 	    // Aggiorna singola Candidatura (UPDATE)
-		   public void candidatureUpdate(Candidature candidature) throws WallaDBException 
+		   public void candidatureUpdate(Candidature candidature) throws WallaDBException
 		   {
 			   LOGGER.info("Candidature.UpdateCandidature - START");
-			   
+
 			   try {
 	           List<Object> params = new ArrayList<Object>();
 	           List<Integer> types = new ArrayList<Integer>();
-			   
+
 				String  sqlUpdate = "UPDATE TABLE "+TABLE_CANDIDATURA+ " ";
-	           
+
 			   if(candidature.getDescrizione() != null && !candidature.getDescrizione().isEmpty())
 			   {sqlUpdate += "SET descrizione="+candidature.getDescrizione() ;
 			      params.add(candidature.getDescrizione());
 			     types.add(Types.VARCHAR);
 			   }
-			   
+
 
 			   // sistemare la virgola (es. se aggiorno un solo attributo ,)
 			   sqlUpdate += "WHERE "+TABLE_CANDIDATURA+".idcandidatura = ?";
 
-			   
+
 				jdbcTemplate.update(sqlUpdate,params,types);
 				LOGGER.info(candidature +"added to the table " +TABLE_CANDIDATURA);
-				
+
 			   }catch (Exception e) {
 					LOGGER.error(e.getMessage(), e);
 					LOGGER.error("Error in Candidature.candidatureUpdate[" + candidature + "]: " + e.getMessage(), e);
@@ -195,28 +196,28 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 				}finally{
 					LOGGER.info("Candidature.candidatureUpdate - END");
 				}
-			   		 
-			   	 } 
-		   
-		   
+
+			   	 }
+
+
 		   // Aggiungi nuova Candidatura
 		   public void candidatureAdd(Candidature candidature) throws WallaDBException {
 				LOGGER.info("Candidature.InsertCandidature - START");
-	        try{	
-			String  sqlAdd = "INSERT INTO "+ TABLE_CANDIDATURA + 
+	        try{
+			String  sqlAdd = "INSERT INTO "+ TABLE_CANDIDATURA +
 								" (idcandidatura, idcandidato, idofferta, descrizione) " +
 								"VALUES (?, ?, ?, ?)" ;
-			      
-			Object[] params = {candidature.getIdcandidatura(),candidature.getIdcandidato(), 
-					           candidature.getIdofferta(), candidature.getDescrizione()};   	  
-		             
+
+			Object[] params = {candidature.getIdcandidatura(),candidature.getIdcandidato(),
+					           candidature.getIdofferta(), candidature.getDescrizione()};
+
 			LOGGER.info(candidature +"added to the table " +TABLE_CANDIDATURA);
-			 
-			int[] types = { Types.BIGINT, Types.BIGINT, Types.BIGINT, Types.VARCHAR };	
-		   
+
+			int[] types = { Types.BIGINT, Types.BIGINT, Types.BIGINT, Types.VARCHAR };
+
 			jdbcTemplate.update(sqlAdd,params,types);
 			LOGGER.info(candidature +"added to the table " +TABLE_CANDIDATURA);
-			
+
 		   } catch (Exception e) {
 				LOGGER.error(e.getMessage(), e);
 				LOGGER.error("Error in Candidature.InsertCandidature[" + candidature + "]: " + e.getMessage(), e);
@@ -224,7 +225,60 @@ private static final Logger LOGGER = LoggerFactory.getLogger(ExperienceDao.class
 			}finally{
 				LOGGER.info("candidature.InsertCandidature - END");
 			}
-	        
+
 		   }
-	
+
+		 	private class CandidatureWithCandidateRowMapper implements RowMapper<Candidature>
+			{
+
+				@Override
+				public Candidature mapRow(ResultSet rs, int rowNum) throws SQLException {
+					// TODO Auto-generated method stub
+					Candidature canidatura = new Candidature();
+					canidatura.setIdcandidatura(rs.getLong("idcandidatura"));
+					canidatura.setIdcandidato(rs.getLong("idcandidato"));
+					canidatura.setIdofferta(rs.getLong("idofferta"));
+					canidatura.setDescrizione(rs.getString("descrizione"));
+
+					Candidate candidate = new Candidate();
+					 candidate.setNome(rs.getString("nome"));
+					 candidate.setCognome(rs.getString("cognome"));
+					 candidate.setAnniesperienza(rs.getString("anniesperienza"));
+
+					 canidatura.setCandidate(candidate);
+
+					return canidatura;
+				}
+		  }
+
+
+		   // Ottieni elenco Candidature per offerta lavoro
+			public List<Candidature> getCandidatureForOffer(Long idOffer) throws WallaDBException
+			{
+		    	LOGGER.info("CandidatureDao.getCandidatureForOffer - START");
+		    	String sql = "SELECT "
+		    			+ "c.idcandidatura as IDCANDIDATURA,"
+		    			+ "c.idcandidato as IDCANDIDATO,"
+		    			+ "c.idofferta as IDOFFERTA,"
+		    			+ "c.descrizione as DESCRIZIONE, "
+		    			+ "cc.nome as NOME, "
+		    			+ "cc.cognome as COGNOME, "
+		    			+ "cc.annidiesperienza as ANNIESPERIENZA "
+		    			+ "FROM "+TABLE_CANDIDATURA+" as C ," +TABLE_CANDIDATO+" CC "
+		    			+ "WHERE c.idcandidato = cc.idcandidato "
+		    			+ "and C.idofferta = ?" ;
+
+		    	List<Candidature> candidatures = null;
+			      try{
+			    	  candidatures = jdbcTemplate.query(sql, new Object[] { idOffer }, new CandidatureWithCandidateRowMapper());
+			    	}catch(Exception e){
+			    		LOGGER.info("error in getCandidatureForOffer :"+e.getMessage(),e);
+			    		throw new WallaDBException("error in getCandidatureForOffer:"+e.getMessage());
+			    	}finally{
+			    		LOGGER.info("CandidatureDao.getCandidatureForOffer  - END");
+			    	}
+
+			    	return candidatures;
+			}
+
 }
